@@ -1,0 +1,204 @@
+1. Dependencies node , truffle , ganache , metamask
+
+a. Check node version
+cmd: node -v
+
+b. Check whether truffle is installed or not
+cmd: truffle
+
+2. Setting up project
+
+a. Create project folder token_sale
+
+C:\Users\azazel\UdemyBlockchain\token_sale
+
+b. cmd: truffle init (This will create Compile , Migrate and Test contract folder )
+
+c. Go to truffle-config.js
+
+write code: 
+development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 8545,            // Standard Ethereum port (default: none)
+     network_id: "*",       // Any network (default: none)
+    },
+	
+
+
+d. Create DappToken.sol file in contracts folder
+
+write some code 
+
+e. Now we have to migrate the written  DappToken.sol contract
+ create 2_deploy_contracts.js file inside migrations folder
+
+write the code
+
+f. 
+cmd: truffle migrate   (This will deploy contract to the ganache blockchain also build folder is created which contain 2 .json files that contains ABI and other info regarging contract .
+
+g. now contracts are deployed on blockchain we can see it on ganache .
+now we can interact with the deployed blockchain using truffle console
+
+cmd: truffle console
+
+cmd: DappToken.deployed().then(function(i) {token = i ;})      ( Here DappToken is the variable that we have created in 2_deploy_contracts.js file inside migrations folder , basically this will  create the instance of the deployed contract and assign it to token variable so that we can access the contract variables and methods)
+
+cmd: token.address                                             (This will return contract address)
+
+cmd:  token.totalSupply().then(function(s) {totalSupply = s ;})   (this will read totalSupply variable brom blockchain) 
+
+cmd: .exit ( to exit from truffle )
+
+
+3. Write some test to test our Smartcontract
+
+a. create a file DappToken.js inside test folder
+   write the code
+   
+b. cmd: truffle test
+
+
+4. Write the complete code in DappToken.sol now deploy again in blockchain
+
+
+a. cmd: truffle migrate --reset 
+Accessing the contract using truffle console
+b. cmd: truffle console
+c. cmd: DappToken.deployed().then(function(instance) {tokenInstance = instance ;})
+d. cmd: tokenInstance.name()
+e. cmd: tokenInstance.totalSupply()
+f. cmd: tokenInstance.transfer('46050fe679De1D56442cDBb3E05daf7dA3775004' , 100 , {from: 'F0A763d824623B583a55830cD4fE43a7dd0Db667'})
+g. cmd: tokenInstance.approve('46050fe679De1D56442cDBb3E05daf7dA3775004' , 10 , {from: 'F0A763d824623B583a55830cD4fE43a7dd0Db667'})    (giving approval to spend 10  token on behalf of msg.sender)
+h. cmd: tokenInstance.allowance('F0A763d824623B583a55830cD4fE43a7dd0Db667' ,'46050fe679De1D56442cDBb3E05daf7dA3775004')                 (this will show 10)
+
+
+
+PART 2 :
+TOKEN sale contract
+
+1. Create DappTokenSale.sol file in contracts folder
+  Write the code in smart contract .
+2. Create DappTokenSale.js file in test folder .
+3. Edit the 2_deploy_contracts.js file inside migrations folder for adding newly created contract info
+
+
+
+==============================Front End==========================================
+1. create package.json file
+ write Below code
+ 
+ {
+    "name": "dapp-token-sale" ,
+    "version": "1.0.0",
+    "description": "Dapp Token Sale ICO" ,
+    "main": "truffle.js" ,
+    "directories" : {
+        "test" : "test"
+    },
+	"scripts": {
+      "dev" : "lite-server"
+    },
+    "author" : "Nachiket" ,
+    "licence" : "ISC" ,
+    "devDependencies": {
+        "lite-server": "^2.3.0"
+    }
+}
+
+2. cmd: npm install       (this will create node modules directory)
+3. cmd: npm run dev        (this will run lite-server , this will open http://localhost:3000 in browser) 
+
+4. create bs-config.json file
+   write below code
+   {
+    "server": {
+        "baseDir": ["./src","./build/contracts"]
+    }
+   }
+   
+5. cmd: npm run dev          (read the text in console  Serving files from: ./src [Browsersync] Serving files from: ./build/contracts )
+
+
+6. Create Folder src
+7. Create Folder css inside folder src
+8. Create Folder js inside folder src
+9. Create File index.html inside folder src
+    Write below code in index.html and again run command npm run dev
+	
+	<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DApp Token ICO Sale</title>
+    <!-- Bootstrap -->
+   
+  </head>
+  <body>
+ <h1>DAPP TOKEN ICO SALE</h1>
+  </body>
+  </html>
+  
+10. Create file bootstrap.min.css inside src/css folder     (copy content from https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css	 and add to newly created file)
+
+11. Create file bootstrap.min.js inside src/js folder       (copy content from https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js and add to newly created file)
+
+12. Create file web3.min.js inside src/js folder                 (Standard code)
+13. Create file truffle-contract.min.js inside src/js folder                  (Standard code)
+14. Create file app.js inside src/js folder
+   write the code 
+   =====================
+15.  Now our backend and frontend is well working , so first we have to add some tokens from admin to DappTokenSale.sol contract so that users can purchase the token from ICO
+
+a. cmd: truffle console
+b. cmd: DappTokenSale.deployed().then(function(i){tokenSale = i;})            (Instance of DappTokenSale)
+c. cmd: DappToken.deployed().then(function(i){token = i;})                     (Instance of DappToken)
+d. cmd: tokenSale.address and token.address                                   (Address of DappTokenSale and DappToken  )
+e. token.transfer( tokenSale.address , 750000 , {from: admin})                 (format of transfer)
+f. token.transfer( tokenSale.address , 750000 , {from: '0x431951945a6eaedbc634772fe544138d0e399b2b'})   (this will add 750000 token to DappTokenSale contract)
+g. token.balanceOf(tokenSale.address)                                                                  (This will show balance of DappTokenSale contract , it will be 750000)
+
+Now we can buy tokens from ICO
+
+=========================================DEPLOY CONTRACT TO Ropsten blockchain network========================================================
+
+1. Make sure you already have
+Save your wallet mnemonic from Metamask      wish crop foot maid deputy drum net copper buyer whale present blame
+Get some test ether                          yes
+Get a Ropsten API key from Infura            https://ropsten.infura.io/v3/b4aa481be8814504b6f9b33822fbcc51
+
+2. Install HDWalletProvider
+cmd: npm install --save truffle-hdwallet-provider
+
+3. In truffle-config.js add the following snippet inside module.exports:
+
+   var HDWalletProvider = require("truffle-hdwallet-provider");
+   const MNEMONIC = 'wish crop foot maid deputy drum net copper buyer whale present blame'; 
+   
+   ropsten: {
+      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/b4aa481be8814504b6f9b33822fbcc51`),
+      network_id: 3,       // Ropsten's id
+      gas: 5500000,        // Ropsten has a lower block limit than mainnet
+     
+    }
+	
+4. Now deploy (or migrate) your contract to Ropsten as follows. By default, Truffle only deploys to the local developer network.
+   cmd: truffle deploy --network ropsten
+5.  DappToken contract address       0x209851012daA3D75B9729e6Dc98c329E32d192Db
+    RcoinTokenSale contract address  0x92B0C21C22222FB56D36a412d94AF03C44e635dD   
+
+6. Access your deployed contract Set up your Truffle console to Ropsten network:
+    a. cmd: truffle console --network ropsten	
+	b. cmd: RcoinTokenSale.deployed().then(function(i){tokenSale = i;})            (Instance of DappTokenSale)
+    c. cmd: RcoinToken.deployed().then(function(i){token = i;})                     (Instance of DappToken)
+    d. cmd: tokenSale.address and token.address                                   (Address of DappTokenSale and DappToken  )
+    e. token.transfer( tokenSale.address , 750000 , {from: admin})                 (format of transfer)
+    f. token.transfer( tokenSale.address , 750000 , {from: '0x865c95c12fa1a56f9a6bcc69039717c50e536808'})   (this will add 750000 token to DappTokenSale contract)
+    g. token.balanceOf(tokenSale.address)    
+	
+	
+	
+============================================DEPLOY WebPage from localhost to server using GitHubpages==============================================================
+	
