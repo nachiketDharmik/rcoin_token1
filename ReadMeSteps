@@ -186,7 +186,7 @@ cmd: npm install --save truffle-hdwallet-provider
 	
 4. Now deploy (or migrate) your contract to Ropsten as follows. By default, Truffle only deploys to the local developer network.
    cmd: truffle deploy --network ropsten
-5.  DappToken contract address       0x209851012daA3D75B9729e6Dc98c329E32d192Db
+5.  RcoinToken contract address       0x209851012daA3D75B9729e6Dc98c329E32d192Db
     RcoinTokenSale contract address  0x92B0C21C22222FB56D36a412d94AF03C44e635dD   
 
 6. Access your deployed contract Set up your Truffle console to Ropsten network:
@@ -201,4 +201,28 @@ cmd: npm install --save truffle-hdwallet-provider
 	
 	
 ============================================DEPLOY WebPage from localhost to server using GitHubpages==============================================================
-	
+	Go to Github website -> repositories -> New -> give name 
+
+    create a new repository on the command line
+cmd: git init
+cmd: git add .
+cmd: git commit -m "first commit"
+cmd: git branch -M main
+cmd: git remote add origin https://github.com/nachiketDharmik/rcoin_token1.git
+cmd: git push -u origin main
+
+
+2. create a folder docs                                           (We created docs folder because github pages going to use contents of docs folder to display our website)
+copy contents of src/ folder and build/contracts/ into docs folder
+
+now we add our new docs folder to github
+cmd: git add docs
+cmd: git commit -m "compiles assets for github pages"
+cmd: git push -u origin main
+now our folder gets added to github
+
+3. Now we have to setup repository to serve our github pages
+Github go to settings -> scroll down to GitHub Pages and select branch main and /docs folder and click save
+
+4. Now we can access our webpage from here : https://nachiketdharmik.github.io/rcoin_token1/
+
